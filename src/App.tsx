@@ -1,31 +1,73 @@
-import { AppBar, Container, Grid, Toolbar, Typography } from "@mui/material";
+import { useState } from "react";
+import {
+  Container,
+  Grid,
+  Fab,
+  AppBar,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import EventForm from "./components/EventForm";
+import EventCard from "./components/EventCard";
+import { EventData } from "./components/EventCard";
+import { Add } from "@mui/icons-material";
 
 function App() {
+  const [events, setEvents] = useState<EventData[]>([]);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
+  const handleAddEvent = (event: EventData) => {
+    setEvents([...events, event]);
+  };
+
+  const handleEditEvent = (editedEvent: EventData) => {
+    const eventIndex = events.findIndex((event) => event === editedEvent);
+    if (eventIndex !== -1) {
+      const updatedEvents = [...events];
+      updatedEvents[eventIndex] = editedEvent;
+      setEvents(updatedEvents);
+    }
+  };
+
+  const handleDeleteEvent = (eventToDelete: EventData) => {
+    setEvents(events.filter((event) => event !== eventToDelete));
+  };
+
   return (
-    <div>
+    <>
       <AppBar position="sticky">
         <Toolbar>
-          <Typography variant="h4" align="center">
-            Event Countdown
-          </Typography>
+          <Typography variant="h6">Event Countdown</Typography>
         </Toolbar>
       </AppBar>
+      <br />
       <Container>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Typography variant="h4" gutterBottom>
-              Current Events:
-            </Typography>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            {/* Countdown component goes here */}
-          </Grid>
-          <Grid item xs={12} md={6}>
-            {/* Event details or other content goes here */}
-          </Grid>
+          {events.map((event, index) => (
+            <Grid item xs={12} key={index}>
+              <EventCard
+                event={event}
+                onDelete={handleDeleteEvent}
+                onEdit={handleEditEvent}
+              />
+            </Grid>
+          ))}
         </Grid>
+        <Fab
+          color="primary"
+          aria-label="Add Event"
+          onClick={() => setIsFormOpen(true)}
+          style={{ position: "fixed", bottom: "20px", right: "20px" }}
+        >
+          <Add />
+        </Fab>
+        <EventForm
+          open={isFormOpen}
+          onClose={() => setIsFormOpen(false)}
+          onSubmit={handleAddEvent}
+        />
       </Container>
-    </div>
+    </>
   );
 }
 
