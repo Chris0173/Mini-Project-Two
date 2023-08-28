@@ -23,7 +23,6 @@ const calculateCountdown = (eventDate: Date): CountdownResult => {
 };
 
 export const useCountdown = (eventDate: Date, selectedFormat: string): CountdownResult => {
-  console.log("useCountdown called with selected format:", selectedFormat);
   const [countdown, setCountdown] = useState(calculateCountdown(eventDate));
 
   useEffect(() => {
@@ -35,15 +34,19 @@ export const useCountdown = (eventDate: Date, selectedFormat: string): Countdown
   }, [eventDate, selectedFormat]);
 
   // Formatting based on the selectedFormat
+  const totalHours = countdown.days * 24 + countdown.hours;
+  const totalMinutes = totalHours * 60 + countdown.minutes;
+  const totalSeconds = totalMinutes * 60 + countdown.seconds;
+  
   const formattedCountdown =
     selectedFormat === "days"
-      ? `${countdown.days}d`
+      ? `${countdown.days} Days`
       : selectedFormat === "hours"
-      ? `${countdown.hours}h`
+      ? `${totalHours} Hours`
       : selectedFormat === "minutes"
-      ? `${countdown.minutes}m`
+      ? `${totalMinutes} Minutes`
       : selectedFormat === "seconds"
-      ? `${countdown.seconds}s`
+      ? `${totalSeconds} Seconds`
       : `${countdown.formattedCountdown}`;
 
   return { ...countdown, formattedCountdown };
