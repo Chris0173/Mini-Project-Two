@@ -10,9 +10,13 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  FormControl,
+  MenuItem,
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
-import useCountdown from "../hooks/useCountdown";
+import useCountdown from "../hooks/useCountdown"; // Assuming this is your custom hook
+import { Select } from "@mui/material";
+import { useCountdownFormat } from "../hooks/useCountdownFormat";
 
 export interface EventCardProps {
   event: EventData;
@@ -28,6 +32,9 @@ export interface EventData {
 }
 
 function EventCard({ event, onEdit, onDelete }: EventCardProps) {
+  const { countdownFormatOptions, selectedFormat, setSelectedFormat } =
+    useCountdownFormat(); // Use the custom hook
+
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editedEvent, setEditedEvent] = useState(event);
 
@@ -78,6 +85,18 @@ function EventCard({ event, onEdit, onDelete }: EventCardProps) {
         <IconButton onClick={() => onDelete(event)}>
           <Delete />
         </IconButton>
+        <FormControl>
+          <Select
+            value={selectedFormat}
+            onChange={(e) => setSelectedFormat(e?.target.value)}
+          >
+            {countdownFormatOptions.map((formatOption) => (
+              <MenuItem key={formatOption.value} value={formatOption.value}>
+                {formatOption.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </CardContent>
 
       {/* Edit Dialog */}
