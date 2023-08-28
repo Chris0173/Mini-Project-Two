@@ -31,8 +31,6 @@ function App() {
   const { selectedFormat, setSelectedFormat, countdownFormatOptions } =
     useCountdownFormat();
 
-  console.log("App rendered with selectedFormat:", selectedFormat);
-
   const handleAddEvent = (event: EventData) => {
     // Add an ID property to the event before saving it
     const eventWithId = { ...event, id: uuidv4() };
