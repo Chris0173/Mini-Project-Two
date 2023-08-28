@@ -1,5 +1,6 @@
 // EventForm.js
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import {
   TextField,
   Button,
@@ -19,6 +20,7 @@ interface EventData {
   name: string;
   date: string;
   description: string;
+  id: string;
 }
 
 function EventForm({ open, onClose, onSubmit }: EventFormProps) {
@@ -27,11 +29,13 @@ function EventForm({ open, onClose, onSubmit }: EventFormProps) {
   const [eventDescription, setEventDescription] = useState("");
 
   const handleSubmit = () => {
-    onSubmit({
+    const newEvent: EventData = {
+      id: uuidv4(),
       name: eventName,
       date: eventDate,
       description: eventDescription,
-    });
+    };
+    onSubmit(newEvent);
     onClose();
   };
 

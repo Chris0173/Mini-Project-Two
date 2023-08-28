@@ -24,6 +24,7 @@ export interface EventData {
   name: string;
   date: string;
   description: string;
+  id: string;
 }
 
 function EventCard({ event, onEdit, onDelete }: EventCardProps) {
@@ -42,6 +43,7 @@ function EventCard({ event, onEdit, onDelete }: EventCardProps) {
   };
 
   const handleSaveEdit = () => {
+    setEditedEvent(editedEvent); // Update local state first
     onEdit(editedEvent); // Call onEdit with edited event data
     setIsEditDialogOpen(false);
   };

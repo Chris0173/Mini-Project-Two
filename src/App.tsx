@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import {
   Container,
   Grid,
@@ -18,16 +19,16 @@ function App() {
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   const handleAddEvent = (event: EventData) => {
-    setEvents([...events, event]);
+    // Add an ID property to the event before saving it
+    const eventWithId = { ...event, id: uuidv4() };
+    setEvents([...events, eventWithId]);
   };
 
   const handleEditEvent = (editedEvent: EventData) => {
-    const eventIndex = events.findIndex((event) => event === editedEvent);
-    if (eventIndex !== -1) {
-      const updatedEvents = [...events];
-      updatedEvents[eventIndex] = editedEvent;
-      setEvents(updatedEvents);
-    }
+    const updatedEvents = events.map((event) =>
+      event.id === editedEvent.id ? editedEvent : event
+    );
+    setEvents(updatedEvents);
   };
 
   const handleDeleteEvent = (eventToDelete: EventData) => {
