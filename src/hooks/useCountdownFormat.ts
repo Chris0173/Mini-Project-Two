@@ -10,6 +10,10 @@ export function useCountdownFormat() {
   ];
 
   const [selectedFormat, setSelectedFormat] = useState("standard");
+  const updateSelectedFormat = (newFormat: string) => {
+    console.log("Updating selected format to:", newFormat);
+    setSelectedFormat(newFormat);
+  };
 
-  return { countdownFormatOptions, selectedFormat, setSelectedFormat };
+  return { countdownFormatOptions, selectedFormat, setSelectedFormat: updateSelectedFormat };
 }

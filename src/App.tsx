@@ -17,6 +17,7 @@ import { EventData } from "./components/EventCard";
 import { Add } from "@mui/icons-material";
 import DarkModeSwitch from "./components/DarkMode";
 import logo from "../src/assets/hourglass2_thumbnail.png";
+import { useCountdownFormat } from "./hooks/useCountdownFormat";
 
 const darkTheme = createTheme({
   palette: {
@@ -27,6 +28,10 @@ const darkTheme = createTheme({
 function App() {
   const [events, setEvents] = useState<EventData[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const { selectedFormat, setSelectedFormat, countdownFormatOptions } =
+    useCountdownFormat();
+
+  console.log("App rendered with selectedFormat:", selectedFormat);
 
   const handleAddEvent = (event: EventData) => {
     // Add an ID property to the event before saving it
@@ -62,6 +67,9 @@ function App() {
           {events.map((event, index) => (
             <Grid item xs={12} key={index}>
               <EventCard
+                selectedFormat={selectedFormat}
+                setSelectedFormat={setSelectedFormat}
+                countdownFormatOptions={countdownFormatOptions}
                 event={event}
                 onDelete={handleDeleteEvent}
                 onEdit={handleEditEvent}

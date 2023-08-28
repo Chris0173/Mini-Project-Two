@@ -1,4 +1,3 @@
-// useCountdown.ts
 import { useState, useEffect } from "react";
 
 interface CountdownResult {
@@ -6,6 +5,7 @@ interface CountdownResult {
   hours: number;
   minutes: number;
   seconds: number;
+  formattedCountdown: string; // Add this line
 }
 
 const calculateCountdown = (eventDate: Date): CountdownResult => {
@@ -17,10 +17,13 @@ const calculateCountdown = (eventDate: Date): CountdownResult => {
   const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
 
-  return { days, hours, minutes, seconds };
+  const formattedCountdown = `${days}d ${hours}h ${minutes}m ${seconds}s`; // Format as desired
+
+  return { days, hours, minutes, seconds, formattedCountdown };
 };
 
-const useCountdown = (eventDate: Date): CountdownResult => {
+export const useCountdown = (eventDate: Date, selectedFormat: string): CountdownResult => {
+  console.log("useCountdown called with selected format:", selectedFormat);
   const [countdown, setCountdown] = useState(calculateCountdown(eventDate));
 
   useEffect(() => {
@@ -29,9 +32,21 @@ const useCountdown = (eventDate: Date): CountdownResult => {
     }, 1000); // Update countdown every second
 
     return () => clearInterval(interval);
-  }, [eventDate]);
+  }, [eventDate, selectedFormat]);
 
-  return countdown;
+  // Formatting based on the selectedFormat
+  const formattedCountdown =
+    selectedFormat === "days"
+      ? `${countdown.days}d`
+      : selectedFormat === "hours"
+      ? `${countdown.hours}h`
+      : selectedFormat === "minutes"
+      ? `${countdown.minutes}m`
+      : selectedFormat === "seconds"
+      ? `${countdown.seconds}s`
+      : `${countdown.formattedCountdown}`;
+
+  return { ...countdown, formattedCountdown };
 };
 
 export default useCountdown;

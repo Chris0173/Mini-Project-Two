@@ -12,16 +12,19 @@ import {
   TextField,
   FormControl,
   MenuItem,
+  SelectChangeEvent,
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
-import useCountdown from "../hooks/useCountdown"; // Assuming this is your custom hook
+import useCountdown from "../hooks/useCountdown";
 import { Select } from "@mui/material";
-import { useCountdownFormat } from "../hooks/useCountdownFormat";
 
 export interface EventCardProps {
   event: EventData;
   onEdit: (event: EventData) => void;
   onDelete: (event: EventData) => void;
+  selectedFormat: string;
+  setSelectedFormat: (format: string) => void;
+  countdownFormatOptions: { label: string; value: string }[];
 }
 
 export interface EventData {
@@ -31,14 +34,24 @@ export interface EventData {
   id: string;
 }
 
-function EventCard({ event, onEdit, onDelete }: EventCardProps) {
-  const { countdownFormatOptions, selectedFormat, setSelectedFormat } =
-    useCountdownFormat(); // Use the custom hook
+function EventCard({
+  event,
+  onEdit,
+  onDelete,
+  selectedFormat,
+  setSelectedFormat,
+  countdownFormatOptions,
+}: EventCardProps) {
+  console.log("EventCard rendered with selectedFormat:", selectedFormat);
+  const countdown = useCountdown(new Date(event.date), selectedFormat);
+
+  const handleSelectChange = (event: SelectChangeEvent<string>) => {
+    console.log("handledSelectChange called with value:", event.target.value);
+    setSelectedFormat(event.target.value);
+  };
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editedEvent, setEditedEvent] = useState(event);
-
-  const { days, hours, minutes, seconds } = useCountdown(new Date(event.date));
 
   const handleEdit = () => {
     setIsEditDialogOpen(true);
@@ -46,12 +59,12 @@ function EventCard({ event, onEdit, onDelete }: EventCardProps) {
 
   const handleCloseEditDialog = () => {
     setIsEditDialogOpen(false);
-    setEditedEvent(event); // Reset edited event
+    setEditedEvent(event);
   };
 
   const handleSaveEdit = () => {
-    setEditedEvent(editedEvent); // Update local state first
-    onEdit(editedEvent); // Call onEdit with edited event data
+    setEditedEvent(editedEvent);
+    onEdit(editedEvent);
     setIsEditDialogOpen(false);
   };
 
@@ -69,7 +82,7 @@ function EventCard({ event, onEdit, onDelete }: EventCardProps) {
           {event.name}
         </Typography>
         <Typography variant="h5" className="countdown">
-          {days}d {hours}h {minutes}m {seconds}s
+          {countdown.formattedCountdown}
         </Typography>
         <Typography variant="body2" className="event-date">
           {event.date}
@@ -86,10 +99,7 @@ function EventCard({ event, onEdit, onDelete }: EventCardProps) {
           <Delete />
         </IconButton>
         <FormControl>
-          <Select
-            value={selectedFormat}
-            onChange={(e) => setSelectedFormat(e?.target.value)}
-          >
+          <Select value={selectedFormat} onChange={handleSelectChange}>
             {countdownFormatOptions.map((formatOption) => (
               <MenuItem key={formatOption.value} value={formatOption.value}>
                 {formatOption.label}
@@ -99,7 +109,6 @@ function EventCard({ event, onEdit, onDelete }: EventCardProps) {
         </FormControl>
       </CardContent>
 
-      {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onClose={handleCloseEditDialog}>
         <DialogTitle>Edit Event</DialogTitle>
         <DialogContent>
