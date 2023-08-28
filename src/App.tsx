@@ -11,6 +11,7 @@ import EventForm from "./components/EventForm";
 import EventCard from "./components/EventCard";
 import { EventData } from "./components/EventCard";
 import { Add } from "@mui/icons-material";
+import logo from "../src/assets/hourglass2_thumbnail.png";
 
 function App() {
   const [events, setEvents] = useState<EventData[]>([]);
@@ -37,6 +38,7 @@ function App() {
     <>
       <AppBar position="sticky">
         <Toolbar>
+          <img src={logo} width="60px" />
           <Typography variant="h6">Event Countdown</Typography>
         </Toolbar>
       </AppBar>
