@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import "./components/styles.css";
 import {
   Container,
   Grid,
@@ -7,12 +8,21 @@ import {
   AppBar,
   Toolbar,
   Typography,
+  ThemeProvider,
+  createTheme,
 } from "@mui/material";
 import EventForm from "./components/EventForm";
 import EventCard from "./components/EventCard";
 import { EventData } from "./components/EventCard";
 import { Add } from "@mui/icons-material";
+import DarkModeSwitch from "./components/DarkMode";
 import logo from "../src/assets/hourglass2_thumbnail.png";
+
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
 
 function App() {
   const [events, setEvents] = useState<EventData[]>([]);
@@ -36,11 +46,14 @@ function App() {
   };
 
   return (
-    <>
+    <ThemeProvider theme={darkTheme}>
       <AppBar position="sticky">
-        <Toolbar>
+        <Toolbar className="NavBar">
           <img src={logo} width="60px" />
-          <Typography variant="h6">Event Countdown</Typography>
+          <Typography variant="h6" className="title">
+            Event Countdown
+          </Typography>
+          <DarkModeSwitch />
         </Toolbar>
       </AppBar>
       <br />
@@ -70,7 +83,7 @@ function App() {
           onSubmit={handleAddEvent}
         />
       </Container>
-    </>
+    </ThemeProvider>
   );
 }
 

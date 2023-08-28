@@ -57,15 +57,21 @@ function EventCard({ event, onEdit, onDelete }: EventCardProps) {
 
   return (
     <Card>
-      <CardContent>
-        <Typography variant="h6">{event.name}</Typography>
-        <Typography variant="body2">{event.date}</Typography>
-        <Typography variant="body2">{event.description}</Typography>
-        <br />
-        <Typography variant="h5" align="left">
+      <CardContent className="card-content">
+        <Typography variant="h6" className="event-name">
+          {event.name}
+        </Typography>
+        <Typography variant="h5" className="countdown">
           {days}d {hours}h {minutes}m {seconds}s
-        </Typography>{" "}
-        {/* Display countdown */}
+        </Typography>
+        <Typography variant="body2" className="event-date">
+          {event.date}
+        </Typography>
+        <Typography variant="body2" className="event-description">
+          {event.description}
+        </Typography>
+        <br />
+
         <IconButton onClick={handleEdit}>
           <Edit />
         </IconButton>
