@@ -1,5 +1,5 @@
-import { Modal, Button } from "@mui/material";
-import { useState } from "react"; // Import useState
+import React, { useState } from "react";
+import { Modal, TextField, Button, Box } from "@mui/material";
 
 interface LoginModalProps {
   open: boolean;
@@ -20,29 +20,45 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onClose, onLogin }) => {
     onLogin(username, password);
     setUsername("");
     setPassword("");
-    onClose();
   };
 
   return (
     <Modal open={open} onClose={onClose}>
-      <div className="modal">
+      <Box
+        borderRadius={8}
+        color={"white"}
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          bgcolor: "background.paper",
+          boxShadow: 24,
+          p: 4,
+          width: "300px",
+          textAlign: "center",
+        }}
+      >
         <h2>Login</h2>
-        <input
-          type="text"
-          placeholder="Username"
+        <TextField
+          label="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          fullWidth
+          margin="normal"
         />
-        <input
+        <TextField
+          label="Password"
           type="password"
-          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          fullWidth
+          margin="normal"
         />
-        <Button variant="contained" onClick={handleLogin}>
+        <Button variant="contained" color="primary" onClick={handleLogin}>
           Login
         </Button>
-      </div>
+      </Box>
     </Modal>
   );
 };

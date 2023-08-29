@@ -108,6 +108,7 @@ function App() {
             </div>
           </Toolbar>
         </AppBar>
+        <br />
         <RegistrationModal
           open={isRegisterModalOpen}
           onClose={() => setIsRegisterModalOpen(false)}
