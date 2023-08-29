@@ -21,19 +21,32 @@ import {
   Button,
 } from "@mui/material";
 import { useCountdownFormat } from "./hooks/useCountdownFormat";
+import LoginModal from "./components/LoginModal";
 
 function App() {
   const [events, setEvents] = useState<EventData[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const { selectedFormat, setSelectedFormat, countdownFormatOptions } =
     useCountdownFormat();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   const handleRegister = (username: string, password: string) => {
     if (username.trim() === "" || password.trim() === "") {
       alert("Please enter a valid username or password.");
       return;
     }
+
+    setIsRegisterModalOpen(false);
+  };
+
+  const handleLogin = (username: string, password: string) => {
+    if (username.trim() === "" || password.trim() === "") {
+      alert("Please enter a valid username or password.");
+      return;
+    }
+
+    setIsLoginModalOpen(false);
   };
 
   const darkTheme = createTheme({
@@ -79,19 +92,32 @@ function App() {
             </Typography>
             <div style={{ flexGrow: 1 }} />
             <div className="nav-link">
-              <Button onClick={() => setIsModalOpen(true)} className="nav-link">
+              <Button
+                onClick={() => setIsRegisterModalOpen(true)}
+                className="nav-link"
+              >
                 Register
+              </Button>
+              <Button
+                onClick={() => setIsLoginModalOpen(true)}
+                className="nav-link"
+              >
+                Login
               </Button>
               <DarkModeSwitch />
             </div>
           </Toolbar>
         </AppBar>
         <RegistrationModal
-          open={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          open={isRegisterModalOpen}
+          onClose={() => setIsRegisterModalOpen(false)}
           onRegister={handleRegister}
         />
-        <br />
+        <LoginModal
+          open={isLoginModalOpen}
+          onClose={() => setIsLoginModalOpen(false)}
+          onLogin={handleLogin}
+        />
         <Container>
           <Grid container spacing={2}>
             {events.map((event, index) => (
