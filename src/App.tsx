@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import routes from "./routes";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import EventForm from "./components/EventForm";
-import EventCard from "./components/EventCard";
-import { EventData } from "./components/EventCard";
+import EventCard, { EventData } from "./components/EventCard";
+import Register from "./components/RegistrationForm";
+import RegistrationModal from "./components/RegistrationModal"; // Updated import
 import "./components/styles.css";
 import DarkModeSwitch from "./components/DarkMode";
-import { useCountdownFormat } from "./hooks/useCountdownFormat";
 import logo from "../src/assets/hourglass2_thumbnail.png";
 import { Add } from "@mui/icons-material";
 import {
@@ -19,19 +18,29 @@ import {
   Typography,
   ThemeProvider,
   createTheme,
+  Button,
 } from "@mui/material";
-
-const darkTheme = createTheme({
-  palette: {
-    mode: "dark",
-  },
-});
+import { useCountdownFormat } from "./hooks/useCountdownFormat";
 
 function App() {
   const [events, setEvents] = useState<EventData[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const { selectedFormat, setSelectedFormat, countdownFormatOptions } =
     useCountdownFormat();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleRegister = (username: string, password: string) => {
+    if (username.trim() === "" || password.trim() === "") {
+      alert("Please enter a valid username or password.");
+      return;
+    }
+  };
+
+  const darkTheme = createTheme({
+    palette: {
+      mode: "dark",
+    },
+  });
 
   const handleAddEvent = (event: EventData) => {
     // Add an ID property to the event before saving it
@@ -52,6 +61,15 @@ function App() {
 
   return (
     <Router>
+      <Routes>
+        <Route path="/register" element={<Register />} />
+        <Route path="/" element={<AppContent />} />
+      </Routes>
+    </Router>
+  );
+
+  function AppContent() {
+    return (
       <ThemeProvider theme={darkTheme}>
         <AppBar position="sticky">
           <Toolbar className="NavBar">
@@ -59,18 +77,20 @@ function App() {
             <Typography variant="h6" className="title">
               Event Countdown
             </Typography>
-            <div style={{ flexGrow: 1 }} /> {/* Spacer */}
+            <div style={{ flexGrow: 1 }} />
             <div className="nav-link">
-              <Link to="/register" className="nav-link">
+              <Button onClick={() => setIsModalOpen(true)} className="nav-link">
                 Register
-              </Link>
-              <Link to="/login" className="nav-link">
-                Login
-              </Link>
+              </Button>
               <DarkModeSwitch />
             </div>
           </Toolbar>
         </AppBar>
+        <RegistrationModal
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onRegister={handleRegister}
+        />
         <br />
         <Container>
           <Grid container spacing={2}>
@@ -102,8 +122,8 @@ function App() {
           />
         </Container>
       </ThemeProvider>
-    </Router>
-  );
+    );
+  }
 }
 
 export default App;

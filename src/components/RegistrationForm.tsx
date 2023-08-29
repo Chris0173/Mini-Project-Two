@@ -1,6 +1,6 @@
 import { Button, TextField } from "@mui/material";
 import { useState } from "react";
-import uuidv4 from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 const RegistrationForm: React.FC = () => {
   const [username, setUsername] = useState("");

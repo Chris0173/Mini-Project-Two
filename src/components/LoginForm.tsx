@@ -1,42 +1,28 @@
-// LoginForm.tsx
-import React, { useState } from "react";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import { Button, TextField } from "@mui/material";
+import { useState } from "react";
 
-interface User {
-  username: string;
-  password: string;
+interface LoginFormProps {
+  onLogin: (username: string, password: string) => void;
 }
 
-const LoginForm: React.FC = () => {
+const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = () => {
-    const storedUserJSON = localStorage.getItem("currentUser");
-    if (storedUserJSON) {
-      const storedUser: User = JSON.parse(storedUserJSON);
-
-      if (
-        storedUser.username === username &&
-        storedUser.password === password
-      ) {
-        alert("Login successful!");
-        // Implement your logic for routing or displaying content after successful login
-      } else {
-        alert("Invalid username or password.");
-      }
-    } else {
-      alert("User not found.");
+    if (username.trim() === "" || password.trim() === "") {
+      alert("Please enter a valid username and password.");
+      return;
     }
 
-    // Clear input fields after login attempt
+    onLogin(username, password);
+
     setUsername("");
     setPassword("");
   };
 
   return (
-    <div>
+    <>
       <TextField
         label="Username"
         value={username}
@@ -51,7 +37,7 @@ const LoginForm: React.FC = () => {
       <Button variant="contained" color="primary" onClick={handleLogin}>
         Login
       </Button>
-    </div>
+    </>
   );
 };
 
