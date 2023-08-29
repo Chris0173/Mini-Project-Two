@@ -5,7 +5,7 @@ interface CountdownResult {
   hours: number;
   minutes: number;
   seconds: number;
-  formattedCountdown: string; // Add this line
+  formattedCountdown: string;
 }
 
 const calculateCountdown = (eventDate: Date): CountdownResult => {
@@ -17,7 +17,7 @@ const calculateCountdown = (eventDate: Date): CountdownResult => {
   const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
 
-  const formattedCountdown = `${days}d ${hours}h ${minutes}m ${seconds}s`; // Format as desired
+  const formattedCountdown = `${days}d ${hours}h ${minutes}m ${seconds}s`; 
 
   return { days, hours, minutes, seconds, formattedCountdown };
 };
@@ -28,12 +28,12 @@ export const useCountdown = (eventDate: Date, selectedFormat: string): Countdown
   useEffect(() => {
     const interval = setInterval(() => {
       setCountdown(calculateCountdown(eventDate));
-    }, 1000); // Update countdown every second
+    }, 1000); 
 
     return () => clearInterval(interval);
   }, [eventDate, selectedFormat]);
 
-  // Formatting based on the selectedFormat
+
   const totalHours = countdown.days * 24 + countdown.hours;
   const totalMinutes = totalHours * 60 + countdown.minutes;
   const totalSeconds = totalMinutes * 60 + countdown.seconds;

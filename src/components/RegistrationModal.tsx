@@ -4,7 +4,7 @@ import { Modal, TextField, Button, Box } from "@mui/material";
 interface RegistrationModalProps {
   open: boolean;
   onClose: () => void;
-  onRegister: (username: string, password: string, fullName: string) => void; // Add fullName parameter
+  onRegister: (username: string, password: string, fullName: string) => void;
 }
 
 const RegistrationModal: React.FC<RegistrationModalProps> = ({
@@ -14,7 +14,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({
 }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState(""); // State for user's full name
+  const [fullName, setFullName] = useState("");
 
   const handleRegister = () => {
     if (
@@ -26,7 +26,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({
       return;
     }
 
-    onRegister(username, password, fullName); // Call the provided onRegister function
+    onRegister(username, password, fullName);
     setUsername("");
     setPassword("");
     setFullName("");

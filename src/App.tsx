@@ -4,7 +4,8 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import EventForm from "./components/EventForm";
 import EventCard, { EventData } from "./components/EventCard";
 import Register from "./components/RegistrationForm";
-import RegistrationModal from "./components/RegistrationModal"; // Updated import
+import RegistrationModal from "./components/RegistrationModal";
+import EmptyStateMessage from "./components/EmptyStateMessage";
 import "./components/styles.css";
 import DarkModeSwitch from "./components/DarkMode";
 import logo from "../src/assets/hourglass2_thumbnail.png";
@@ -56,7 +57,6 @@ function App() {
   });
 
   const handleAddEvent = (event: EventData) => {
-    // Add an ID property to the event before saving it
     const eventWithId = { ...event, id: uuidv4() };
     setEvents([...events, eventWithId]);
   };
@@ -108,6 +108,7 @@ function App() {
             </div>
           </Toolbar>
         </AppBar>
+        <br />
         <br />
         <RegistrationModal
           open={isRegisterModalOpen}
